@@ -1,2 +1,3 @@
 all:
-	g++ -o game main.cpp -lncurses
+	g++ -o game main.cpp game.cpp -lncurses -Wall
+	./game
