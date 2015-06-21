@@ -6,6 +6,7 @@ class game {
         int getSizeX();
         int getSizeY();
         bool running();
+        void stop();
         void render();
         void update();
         void destroy();

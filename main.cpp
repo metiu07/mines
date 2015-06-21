@@ -26,8 +26,9 @@ void mainLoop() {
     while(g.running()) {
         g.render();
         g.update();
-        g.destroy();
+        g.stop();
     }
 
-    
+    g.destroy();
+
 }

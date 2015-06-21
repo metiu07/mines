@@ -39,10 +39,11 @@ int game::getSizeY() {
 }
 
 bool game::running() {
-    if(run)
-        return true;
-    else
-        return false;
+    return run;
+}
+
+void game::stop() {
+    run = false;
 }
 
 void game::render() {
