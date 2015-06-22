@@ -13,4 +13,5 @@ class game {
     private:
         int size_x, size_y;
         bool run;
+        int** grid;
 };

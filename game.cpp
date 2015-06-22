@@ -23,6 +23,16 @@ void game::init() {
     //Dont show cursor
     curs_set(0);
 
+    grid = new int*[size_y];
+    for(int x = 0; x < size_x; x++)
+        grid[x] = new int[size_x];
+
+    for(int y = 0; y < size_y; y++) {
+        for(int x = 0; x < size_x; x++) {
+            grid[y][x] = 0;
+        }
+    }
+
 }
 
 void game::setSize(int x, int y) {
@@ -47,6 +57,18 @@ void game::stop() {
 }
 
 void game::render() {
+
+    for(int y = 0; y < size_y; y++) {
+        for(int x = 0; x < size_x; x++) {
+            switch(grid[y][x]) {
+                case 0: 
+                    addch('#');
+                    break;
+                default:
+                    addch('X');
+            }
+        }
+    }
     
 }
 
