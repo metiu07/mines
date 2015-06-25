@@ -14,4 +14,5 @@ class game {
         int size_x, size_y;
         bool run;
         int** grid;
+        int ch;
 };

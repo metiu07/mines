@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ncurses.h>
 
 #include "game.h"
 
@@ -26,7 +27,6 @@ void mainLoop() {
     while(g.running()) {
         g.render();
         g.update();
-        g.stop();
     }
 
     g.destroy();

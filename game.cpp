@@ -24,12 +24,12 @@ void game::init() {
     curs_set(0);
 
     grid = new int*[size_y];
-    for(int x = 0; x < size_x; x++)
+    for(int x = 0; x < size_x; ++x)
         grid[x] = new int[size_x];
 
     for(int y = 0; y < size_y; y++) {
         for(int x = 0; x < size_x; x++) {
-            grid[y][x] = 0;
+            grid[y][x] = 1;
         }
     }
 
@@ -73,6 +73,10 @@ void game::render() {
 }
 
 void game::update() {
+
+    ch = getch();
+    if(ch != ERR || ch != 0) {
+    }
 
 }
 
