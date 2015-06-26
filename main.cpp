@@ -9,9 +9,13 @@ game g;
 
 int main(int argc, char *argv[]) {
 
+    //Get size of mine field from user
     std::cout << "Zadaj velkost minoveho pola" << std::endl;
     int x, y;
-    std::cin >> x >> y;
+    std::cout << "Sirka: ";
+    std::cin >> x;
+    std::cout << "Vyska: ";
+    std::cin >> y;
 
     g.setSize(x, y);
     g.init();
@@ -24,6 +28,7 @@ int main(int argc, char *argv[]) {
 
 void mainLoop() {
 
+    //Main loop
     while(g.running()) {
         g.update();
         g.render();
