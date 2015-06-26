@@ -24,14 +24,17 @@ void game::init() {
     curs_set(0);
 
     grid = new int*[size_y];
-    for(int x = 0; x < size_x; ++x)
+    for(int x = 0; x < size_x; ++x) {
         grid[x] = new int[size_x];
+    }
 
     for(int y = 0; y < size_y; y++) {
         for(int x = 0; x < size_x; x++) {
             grid[y][x] = 1;
         }
     }
+    
+    run = true;
 
 }
 
@@ -40,12 +43,25 @@ void game::setSize(int x, int y) {
     size_y = y;
 }
 
+void game::setCursor(int x, int y) {
+    cur_x = x;
+    cur_y = y;
+}
+
 int game::getSizeX() {
     return size_x;
 }
 
 int game::getSizeY() {
     return size_y;
+}
+
+int game::getCurX() {
+    return cur_x;
+}
+
+int game::getCurY() {
+    return cur_y;
 }
 
 bool game::running() {
@@ -58,16 +74,19 @@ void game::stop() {
 
 void game::render() {
 
+    erase();
+
     for(int y = 0; y < size_y; y++) {
         for(int x = 0; x < size_x; x++) {
             switch(grid[y][x]) {
-                case 0: 
+                case 1: 
                     addch('#');
                     break;
                 default:
                     addch('X');
             }
         }
+        addch('\n');
     }
     
 }
@@ -76,6 +95,14 @@ void game::update() {
 
     ch = getch();
     if(ch != ERR || ch != 0) {
+        switch(ch) {
+            case KEY_DOWN :
+                grid[1][1] = 2;
+                break;
+            case 'q' :
+                stop();
+                break;
+        }
     }
 
 }

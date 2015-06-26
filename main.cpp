@@ -25,8 +25,8 @@ int main(int argc, char *argv[]) {
 void mainLoop() {
 
     while(g.running()) {
-        g.render();
         g.update();
+        g.render();
     }
 
     g.destroy();
