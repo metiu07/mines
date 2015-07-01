@@ -9,6 +9,7 @@ class game {
         int getCurX();
         int getCurY();
         bool running();
+        void show(int x, int y);
         void stop();
         void render();
         void update();
