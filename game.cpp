@@ -27,14 +27,14 @@ void game::init() {
     cur_y = 0;
     cur_x = 0;
 
-    grid = new int*[size_y];
+    grid = new int*[size_x];
     for(int x = 0; x < size_x; ++x) {
-        grid[x] = new int[size_x];
+        grid[x] = new int[size_y];
     }
 
     for(int y = 0; y < size_y; y++) {
         for(int x = 0; x < size_x; x++) {
-            grid[y][x] = 1;
+            grid[x][y] = 1;
         }
     }
     
@@ -94,7 +94,7 @@ void game::render() {
             if((x == cur_x) && (y == cur_y)) {
                 addch('X');
             } else {
-                switch(grid[y][x]) {
+                switch(grid[x][y]) {
                     case 1: 
                         addch('#');
                         break;
@@ -120,6 +120,7 @@ void game::update() {
     if(ch != ERR || ch != 0) {
         switch(ch) {
             case KEY_DOWN :
+                if (cur_x  = size_x) 
                 setCursor(cur_x, ++cur_y);
                 break;
             case KEY_UP :
