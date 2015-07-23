@@ -3,7 +3,6 @@
 #include <curses.h>
 #include <unistd.h>
 #include <iostream>
-
 using namespace std;
 
 game::game() {
@@ -19,7 +18,7 @@ void game::init() {
     //Special handlig of keys
     cbreak();
     nodelay(stdscr, TRUE);
-    //Use of movement keys
+    //Enable of movement keys
     keypad(stdscr, TRUE);
     //Dont show cursor
     curs_set(0);
@@ -28,15 +27,18 @@ void game::init() {
     cur_x = 0;
 
     grid = new int*[size_x];
-    for(int x = 0; x < size_x; ++x) {
-        grid[x] = new int[size_y];
+    for(int y = 0; y < size_x; ++y) {
+        grid[y] = new int[size_y];
     }
 
-    for(int y = 0; y < size_y; y++) {
-        for(int x = 0; x < size_x; x++) {
-            grid[x][y] = 1;
+    for(int y = 0; y < size_y; ++y) {
+        for(int x = 0; x < size_x; ++x) {
+            grid[x][y] = 10;
         }
     }
+
+    grid[1][0] = 9;
+    grid[3][3] = 9;
     
     run = true;
 
@@ -76,12 +78,58 @@ void game::stop() {
     run = false;
 }
 
+//Grid Codes
+//0 - 8 -> numbers of adjecement mines
+//9 -> mine
+//10 -> hidden place without mine
+
 void game::show(int x, int y) {
 
-    if(grid[x][y] != 2) {
-        grid[x][y] = 3;
+    //To much logic O.o
+
+    if(grid[x][y] == 10)  {
+        //If its not mine or black space
+        //Show adjacement places
+        
+        grid[x][y] = 0;
+
+        if(x != 0) {
+            show(x - 1, y);
+        }
+
+        if(x != size_x - 1) {
+            show(x + 1, y);
+        }
+
+        if(y != 0) {
+            show(x, y - 1);
+        }
+
+        if(y != size_y - 1) {
+            show(x, y + 1);
+        }
+
+        if((x != 0) && (y != 0)) {
+            show(x - 1, y - 1);
+        }
+
+        if((x != size_x - 1) && (y != size_y - 1)) {
+            show(x + 1, y + 1);
+        }
+
+        if((x != 0) && (y != size_y - 1)) {
+            show(x - 1, y + 1);
+        }
+
+        if((x != size_x - 1) && (y != 0)) {
+            show(x + 1, y - 1);
+        }
+
+
     } else {
-        stop();
+        if(grid[cur_x][cur_y] == 9) {
+            stop();
+        }
     }
 }
 
@@ -95,17 +143,41 @@ void game::render() {
                 addch('X');
             } else {
                 switch(grid[x][y]) {
-                    case 1: 
-                        addch('#');
-                        break;
-                    case 2:
-                        addch('#');
-                        break;
-                    case 3:
+                    case 0:
                         addch(' ');
                         break;
+                    case 1: 
+                        addch('1');
+                        break;
+                    case 2:
+                        addch('2');
+                        break;
+                    case 3:
+                        addch('3');
+                        break;
+                    case 4:
+                        addch('4');
+                        break;
+                    case 5:
+                        addch('5');
+                        break;
+                    case 6:
+                        addch('6');
+                        break;
+                    case 7:
+                        addch('7');
+                        break;
+                    case 8:
+                        addch('8');
+                        break;
+                    case 9:
+                        addch('#');
+                        break;
+                    case 10:
+                        addch('#');
+                        break;
                     default:
-                        addch('X');
+                        addch('E');
                 }
             }
         }
@@ -120,17 +192,20 @@ void game::update() {
     if(ch != ERR || ch != 0) {
         switch(ch) {
             case KEY_DOWN :
-                if (cur_x  = size_x) 
-                setCursor(cur_x, ++cur_y);
+                if(cur_y != size_y - 1)
+                    setCursor(cur_x, ++cur_y);
                 break;
             case KEY_UP :
-                setCursor(cur_x, --cur_y);
+                if(cur_y != 0)
+                    setCursor(cur_x, --cur_y);
                 break;
             case KEY_LEFT :
-                setCursor(--cur_x, cur_y);
+                if(cur_x != 0)
+                    setCursor(--cur_x, cur_y);
                 break;
             case KEY_RIGHT :
-                setCursor(++cur_x, cur_y);
+                if(cur_x != size_x - 1)
+                    setCursor(++cur_x, cur_y);
                 break;
             case 'c' : 
                 show(cur_x, cur_y);
