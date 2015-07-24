@@ -10,6 +10,7 @@ class game {
         int getCurY();
         bool running();
         int countmines(int x, int y);
+        void checkforwin();
         void show(int x, int y);
         void stop();
         void render();

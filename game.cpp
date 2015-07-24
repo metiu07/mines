@@ -3,6 +3,9 @@
 #include <curses.h>
 #include <unistd.h>
 #include <iostream>
+#include <stdlib.h>
+#include <time.h>
+
 using namespace std;
 
 game::game() {
@@ -26,6 +29,8 @@ void game::init() {
     cur_y = 0;
     cur_x = 0;
 
+    srand(time(NULL));
+
     grid = new int*[size_x];
     for(int y = 0; y < size_x; ++y) {
         grid[y] = new int[size_y];
@@ -33,13 +38,11 @@ void game::init() {
 
     for(int y = 0; y < size_y; ++y) {
         for(int x = 0; x < size_x; ++x) {
-            grid[x][y] = 10;
+            if(rand() % 100 <= 5) grid[x][y] = 9;
+            else grid[x][y] = 10;
         }
     }
 
-    grid[1][0] = 9;
-    grid[3][3] = 9;
-    
     run = true;
 
 }
@@ -116,20 +119,36 @@ int game::countmines(int x, int y) {
     return result;
 }
 
+void game::checkforwin() {
+    
+    for(int y = 0; y < size_y; ++y) {
+        for(int x = 0; x < size_x; ++x) {
+            if((grid[x][y] == 9) || (grid[x][y] == 10)) return;
+        }
+    }
+
+    stop();
+    return;
+
+}
+
 //Grid Codes
 //0 - 8 -> numbers of adjecement mines
 //9 -> mine
 //10 -> hidden place without mine
+//11 -> flag
 
 void game::show(int x, int y) {
 
     //To much logic O.o
 
-    if(grid[x][y] == 10)  {
+    if((grid[x][y] == 10) || (grid[x][y] == 11))  {
         //If its not mine or black space
         //Show adjacement places
         
         grid[x][y] = countmines(x, y);
+
+        if(countmines(x, y) != 0) return;
 
         if(x != 0) {
             show(x - 1, y);
@@ -165,9 +184,7 @@ void game::show(int x, int y) {
 
 
     } else {
-        if(grid[cur_x][cur_y] == 9) {
-            stop();
-        }
+        if(grid[cur_x][cur_y] == 9) stop();
     }
 }
 
@@ -209,10 +226,16 @@ void game::render() {
                         addch('8');
                         break;
                     case 9:
-                        addch('#');
+                        addch('R');
                         break;
                     case 10:
                         addch('#');
+                        break;
+                    case 11:
+                        addch('F');
+                        break;
+                    case 12:
+                        addch('F');
                         break;
                     default:
                         addch('E');
@@ -245,17 +268,43 @@ void game::update() {
                 if(cur_x != size_x - 1)
                     setCursor(++cur_x, cur_y);
                 break;
+            case 'j' :
+                if(cur_y != size_y - 1)
+                    setCursor(cur_x, ++cur_y);
+                if(cur_x != 0)
+                    setCursor(--cur_x, cur_y);
+                break;
+            case 'l' :
+                if(cur_x != size_x - 1)
+                    setCursor(++cur_x, cur_y);
+                break;
             case 'c' : 
                 show(cur_x, cur_y);
                 break;
             case 'm' :
+                //TODO: only for debuging purposes
                 grid[cur_x][cur_y] = 9;
+                break;
+            case 'x' :
+                //Set flag at cursor position
+                if (grid[cur_x][cur_y] == 10) {
+                    grid[cur_x][cur_y] = 11;
+                } else if (grid[cur_x][cur_y] == 9) {
+                    grid[cur_x][cur_y] = 12;
+                } else if (grid[cur_x][cur_y] == 12) {
+                    grid[cur_x][cur_y] = 9;
+                } else if (grid[cur_x][cur_y] == 11) {
+                    grid[cur_x][cur_y] = 10;
+                }
+                
                 break;
             case 'q' :
                 stop();
                 break;
         }
     }
+
+    checkforwin();
 
 }
 
