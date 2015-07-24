@@ -17,6 +17,7 @@ class game {
         void update();
         void destroy();
     private:
+        int mines;
         int cur_x, cur_y;
         int size_x, size_y;
         bool run;

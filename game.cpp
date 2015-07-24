@@ -38,9 +38,17 @@ void game::init() {
 
     for(int y = 0; y < size_y; ++y) {
         for(int x = 0; x < size_x; ++x) {
-            if(rand() % 100 <= 5) grid[x][y] = 9;
-            else grid[x][y] = 10;
+            grid[x][y] = 10;
         }
+    }
+
+    int cur_mines = 0;
+    mines = 5;
+
+    
+    while(cur_mines <= mines) {
+        grid[rand() % (size_x - 1)][rand() % (size_y - 1)] = 9;
+        cur_mines++;
     }
 
     run = true;
@@ -85,35 +93,35 @@ int game::countmines(int x, int y) {
     int result = 0;
 
     if(x != 0) {
-        if (grid[x - 1][y] == 9) ++result;
+        if ((grid[x - 1][y] == 9) || (grid[x - 1][y] == 12)) ++result;
     }
 
     if(x != size_x - 1) {
-        if (grid[x + 1][y] == 9) ++result;
+        if ((grid[x + 1][y] == 9) || (grid[x + 1][y] == 12)) ++result;
     }
 
     if(y != 0) {
-        if (grid[x][y - 1] == 9) ++result;
+        if ((grid[x][y - 1] == 9) || (grid[x][y - 1] == 12)) ++result;
     }
 
     if(y != size_y - 1) {
-        if (grid[x][y + 1] == 9) ++result;
+        if ((grid[x][y + 1] == 9) || (grid[x][y + 1] == 12)) ++result;
     }
 
     if((x != 0) && (y != 0)) {
-        if (grid[x - 1][y - 1] == 9) ++result;
+        if ((grid[x - 1][y - 1] == 9) || (grid[x - 1][y - 1] == 12)) ++result;
     }
 
     if((x != size_x - 1) && (y != size_y - 1)) {
-        if (grid[x + 1][y + 1] == 9) ++result;
+        if ((grid[x + 1][y + 1] == 9) || (grid[x + 1][y + 1] == 12)) ++result;
     }
 
     if((x != 0) && (y != size_y - 1)) {
-        if (grid[x - 1][y + 1] == 9) ++result;
+        if ((grid[x - 1][y + 1] == 9) || (grid[x - 1][y + 1] == 12)) ++result;
     }
 
     if((x != size_x - 1) && (y != 0)) {
-        if (grid[x + 1][y - 1] == 9) ++result;
+        if ((grid[x + 1][y - 1] == 9) || (grid[x + 1][y - 1] == 12)) ++result;
     }
 
     return result;
@@ -226,7 +234,7 @@ void game::render() {
                         addch('8');
                         break;
                     case 9:
-                        addch('R');
+                        addch('#');
                         break;
                     case 10:
                         addch('#');
@@ -268,9 +276,15 @@ void game::update() {
                 if(cur_x != size_x - 1)
                     setCursor(++cur_x, cur_y);
                 break;
+            case 'k' :
+                if(cur_y != 0)
+                    setCursor(cur_x, --cur_y);
+                break;
             case 'j' :
                 if(cur_y != size_y - 1)
                     setCursor(cur_x, ++cur_y);
+                break;
+            case 'h' :
                 if(cur_x != 0)
                     setCursor(--cur_x, cur_y);
                 break;
