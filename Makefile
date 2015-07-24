@@ -4,3 +4,6 @@ all :
 
 compile : 
 	g++ -o game main.cpp game.cpp -lncurses -Wall -g
+
+run :
+	./game

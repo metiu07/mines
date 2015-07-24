@@ -78,6 +78,44 @@ void game::stop() {
     run = false;
 }
 
+int game::countmines(int x, int y) {
+    int result = 0;
+
+    if(x != 0) {
+        if (grid[x - 1][y] == 9) ++result;
+    }
+
+    if(x != size_x - 1) {
+        if (grid[x + 1][y] == 9) ++result;
+    }
+
+    if(y != 0) {
+        if (grid[x][y - 1] == 9) ++result;
+    }
+
+    if(y != size_y - 1) {
+        if (grid[x][y + 1] == 9) ++result;
+    }
+
+    if((x != 0) && (y != 0)) {
+        if (grid[x - 1][y - 1] == 9) ++result;
+    }
+
+    if((x != size_x - 1) && (y != size_y - 1)) {
+        if (grid[x + 1][y + 1] == 9) ++result;
+    }
+
+    if((x != 0) && (y != size_y - 1)) {
+        if (grid[x - 1][y + 1] == 9) ++result;
+    }
+
+    if((x != size_x - 1) && (y != 0)) {
+        if (grid[x + 1][y - 1] == 9) ++result;
+    }
+
+    return result;
+}
+
 //Grid Codes
 //0 - 8 -> numbers of adjecement mines
 //9 -> mine
@@ -91,7 +129,7 @@ void game::show(int x, int y) {
         //If its not mine or black space
         //Show adjacement places
         
-        grid[x][y] = 0;
+        grid[x][y] = countmines(x, y);
 
         if(x != 0) {
             show(x - 1, y);
@@ -209,6 +247,9 @@ void game::update() {
                 break;
             case 'c' : 
                 show(cur_x, cur_y);
+                break;
+            case 'm' :
+                grid[cur_x][cur_y] = 9;
                 break;
             case 'q' :
                 stop();
