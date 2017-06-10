@@ -5,4 +5,4 @@ Another attempt... still nothing finished...
 
 =====
 
-Requied libraries: ncurses
+Required libraries: ncurses
